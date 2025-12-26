@@ -1,0 +1,24 @@
+.global-header {
+  background-color: #222;
+  padding: 12px 24px;
+}
+
+.global-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.global-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.global-nav a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  padding: 24px;
+}
