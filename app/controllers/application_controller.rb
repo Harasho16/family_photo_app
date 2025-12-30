@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   # ログイン後にリクエスト先へ戻す
   def store_location
     # Getリクエストのみ保存する
-    return unless request.get?
+    return unless request.get? || request.head?
 
     # ログイン画面は保存しない
     return if request.path == login_path
