@@ -1,4 +1,12 @@
 <h1>写真一覧</h1>
-<p>
-    あとで実装する
-</p>
+
+<%= link_to "写真をアップロード", new_photo_path %>
+
+<hr>
+
+<% @photos.each do |photo| %>
+  <div class="photo-item">
+    <h3><%= photo.title %></h3>
+    <%= image_tag photo.thumbnail if photo.image.attached? %>
+  </div>
+<% end %>
