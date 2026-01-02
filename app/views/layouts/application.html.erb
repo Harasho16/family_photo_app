@@ -24,6 +24,12 @@
   </head>
 
   <body>
+<% flash.each do |type, message| %>
+    <div class="flash flash-<%= type %>">
+      <%= message %>
+    </div>
+<% end %>
+
 <% if logged_in? %>
     <header class="global-header">
       <nav class="global-nav">

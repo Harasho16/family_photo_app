@@ -1,6 +1,9 @@
 <h1>写真一覧</h1>
 
 <%= link_to "写真をアップロード", new_photo_path %>
+<% unless my_tweet_connected? %>
+| <%= link_to "MyTweetアプリと連携", my_tweet_authorize_url %>
+<% end %>
 
 <hr>
 
@@ -8,5 +11,8 @@
   <div class="photo-item">
     <h3><%= photo.title %></h3>
     <%= image_tag photo.thumbnail if photo.image.attached? %>
+<%   if my_tweet_connected? %>
+      <%= button_to "ツイートする", tweet_photo_path(photo), method: :post %>
+<%   end %>
   </div>
 <% end %>

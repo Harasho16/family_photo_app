@@ -88,4 +88,75 @@ RSpec.describe "Photos", type: :request do
       end
     end
   end
+
+  describe "POST /tweet" do
+    let(:user) { create(:user) }
+    let(:photo) { create(:photo, user: user) }
+
+    before do
+      login_as(user)
+    end
+
+    context "OAuth未連携の場合" do
+      it "ツイートせず写真一覧に遷移すること" do
+        post tweet_photo_path(photo)
+
+        expect(response).to redirect_to(photos_path)
+      end
+    end
+
+    context "ツイート成功の場合" do
+      before do
+        # セッションにアクセストークンをセット
+        session_mock = { user_id: user.id, oauth_access_token: "dummy_token" }
+        session_mock.define_singleton_method(:enabled?) { true }
+        session_mock.define_singleton_method(:loaded?) { true }
+        allow_any_instance_of(ActionDispatch::Request)
+          .to receive(:session)
+          .and_return(session_mock)
+
+        # Net::HTTPSuccess を模倣
+        success_response = Net::HTTPSuccess.new('1.1', '200', 'OK')
+
+        allow_any_instance_of(PhotosController)
+          .to receive(:post_tweet)
+          .and_return(success_response)
+      end
+
+      it "ツイート成功の notice を表示すること" do
+        post tweet_photo_path(photo)
+
+        expect(response).to redirect_to(photos_path)
+        follow_redirect!
+
+        expect(response.body).to include("ツイートしました")
+      end
+    end
+
+    context "ツイート失敗の場合" do
+      before do
+        session_mock = { user_id: user.id, oauth_access_token: "dummy_token" }
+        session_mock.define_singleton_method(:enabled?) { true }
+        session_mock.define_singleton_method(:loaded?) { true }
+        allow_any_instance_of(ActionDispatch::Request)
+          .to receive(:session)
+          .and_return(session_mock)
+
+        failure_response = instance_double(Net::HTTPResponse)
+
+        allow_any_instance_of(PhotosController)
+          .to receive(:post_tweet)
+          .and_return(failure_response)
+      end
+
+      it "ツイート失敗の alert を表示すること" do
+        post tweet_photo_path(photo)
+
+        expect(response).to redirect_to(photos_path)
+        follow_redirect!
+
+        expect(response.body).to include("ツイートに失敗しました")
+      end
+    end
+  end
 end
