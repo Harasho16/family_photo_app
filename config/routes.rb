@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
   root "photos#index"
 
-  resources :photos, only: [ :index, :new, :create ]
-  resources :photos, only: [ :index ]
+  resources :photos, only: [ :index, :new, :create ] do
+    member do
+      post :tweet
+    end
+  end
 
   get     "/login",     to: "sessions#new"
   post    "/login",     to: "sessions#create"
   delete  "/logout",    to: "sessions#destroy"
+
+  get "/oauth/callback", to: "my_tweet#callback"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
