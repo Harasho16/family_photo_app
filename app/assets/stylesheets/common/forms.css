@@ -1,0 +1,32 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+
+  label {
+      margin-bottom: 4px;
+      font-weight: bold;
+  }
+
+  input {
+      padding: 8px;
+      font-size: 14px;
+  }
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.form-error {
+  color: #b00020;
+  background-color: #ffecec;
+  border: 1px solid #f5c2c7;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+.input-error {
+  border: 1px solid #b00020;
+  background-color: #fff5f5;
+}

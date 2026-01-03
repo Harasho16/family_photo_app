@@ -11,7 +11,7 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%= stylesheet_link_tag params[:controller], "data-turbo-track": "reload" if File.exist?(Rails.root.join("app/assets/stylesheets/#{params[:controller]}.css")) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
@@ -24,6 +24,22 @@
   </head>
 
   <body>
-    <%= yield %>
+<% if logged_in? %>
+    <header class="global-header">
+      <nav class="global-nav">
+        <div class="nav-left">
+          <%= link_to "写真", photos_path %>
+        </div>
+
+        <div class="nav-right">
+          <%= link_to "ログアウト", logout_path, data: { turbo_method: :delete } %>
+        </div>
+      </nav>
+    </header>
+<% end %>
+
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>
